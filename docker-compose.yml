@@ -1,0 +1,25 @@
+version: '3' #Docker version
+services:
+  web:
+    # service name, it can be app, web, etc
+    build:
+      # we could use `build: .` but Dockerfile has other name than jus Dockerfile
+      context: . # path for Dockerfile (where Dockerfile is)
+      dockerfile: Dockerfile.dev # name of Dockerfile
+    ports:
+      # port mapping
+      - "3000:3000"
+    volumes:
+      # volume mapping
+      - /app/node_modules # path for node_modules locally
+      - .:/app # mapping curent directory ( . ) to /app insde container
+
+  #this is another container designed to run test
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    command: [ "npm", "run", "test" ]
